@@ -1,0 +1,22 @@
+{
+  "name": "attendance_system",
+  "version": "1.0.0",
+  "description": "A smart attendance system",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shivansh Agarwal, Muhammad Nameer Akhter",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "bcrypt-nodejs": "^0.0.3",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.9.2",
+    "nodemon": "^2.0.20",
+    "sqlite": "^4.1.2",
+    "validator": "^13.9.0"
+  }
+}

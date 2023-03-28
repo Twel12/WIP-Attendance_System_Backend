@@ -1,0 +1,67 @@
+{
+    "subjects": [
+      {
+        "name": "Maths",
+        "dates": [
+          {
+            "date": "2022-03-25",
+            "attendance": [
+              {
+                "SystemID": "001",
+                "value": true
+              },
+              {
+                "SystemID": "002",
+                "value": false
+              }
+            ]
+          },
+          {
+            "date": "2022-03-26",
+            "attendance": [
+              {
+                "SystemID": "001",
+                "value": false
+              },
+              {
+                "SystemID": "002",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Science",
+        "dates": [
+          {
+            "date": "2022-03-25",
+            "attendance": [
+              {
+                "SystemID": "001",
+                "value": false
+              },
+              {
+                "SystemID": "002",
+                "value": true
+              }
+            ]
+          },
+          {
+            "date": "2022-03-26",
+            "attendance": [
+              {
+                "SystemID": "001",
+                "value": true
+              },
+              {
+                "SystemID": "002",
+                "value": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  
