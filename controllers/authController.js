@@ -1,6 +1,7 @@
 const auth = require('../models/auth');
 const catchAsync = require('../utils/catchAsync');
 const bcrypt = require('bcrypt-nodejs');
+const jwt = require('jsonwebtoken');
 
 exports.signup = catchAsync (async (req,res,next) => {
     const newUser = await auth.create(req.body);
@@ -12,28 +13,44 @@ exports.signup = catchAsync (async (req,res,next) => {
     });
 });
 
-exports.auth = async (req,res,next) => {
-    const {email, password} = req.body;
-    if(!email || !password){
-        return next(new AppError('Please provide email and password!', 400));
-    }
+exports.auth = async(req,res,next) => {
+    const {email,password,SysID} = req.body;
     try{
-        const auth = await auth.findOne({email: email})
-        if(!auth || auth.length == 0){
-            return next(new AppError('Incorrect email or password', 401));
-        }
-        authpassword = auth.password;
-
-        res.status(200).json({
-            status: 'success',
-            data: {
-                auth_data: auth
+        const authdata = await auth.findOne({email:email}); 
+            if(!authdata){
+                res.status(401).json({
+                    status: 'fail',
+                    message: 'Incorrect email or password'
+                });
+                return (null,false);
             }
-        });
-    }catch(err){
-        res.status(401).json({
-            status:'fail',
-            message: err
-        })
+            const authpassword = authdata.password;
+            const passwordMatch = bcrypt.compareSync(password,authpassword);
+            if(!passwordMatch){
+                res.status(401).json({
+                    status: 'fail',
+                    message: 'Incorrect email or password'
+                });
+            }else{
+                const token = jwt.sign(
+                    {
+                    userId: SysID,
+                    userEmail: email,
+                    },
+                    "RANDOM-TOKEN",
+                    { expiresIn: "24h" }
+                );
+            res.status(200).json({
+                status: 'success',
+                token: token,
+                data: {
+                    auth_list: authdata
+                }})
+            ;}
+    }catch(error){
+            res.status(500).json({
+                status: 'fail',
+                message: error
+            });
     }
 };
