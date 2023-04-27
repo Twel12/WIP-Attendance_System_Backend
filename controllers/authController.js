@@ -13,7 +13,7 @@ exports.signup = catchAsync (async (req,res,next) => {
     });
 });
 
-exports.auth = async(req,res,next) => {
+exports.login = async(req,res,next) => {
     const {email,password,SysID} = req.body;
     try{
         const authdata = await auth.findOne({email:email}); 
@@ -43,9 +43,8 @@ exports.auth = async(req,res,next) => {
             res.status(200).json({
                 status: 'success',
                 token: token,
-                data: {
-                    auth_list: authdata
-                }})
+                    authdata
+                })
             ;}
     }catch(error){
             res.status(500).json({

@@ -1,6 +1,5 @@
 const express = require('express');
-
-const loginRouter = require('./routes/authRoutes.js');
+const authRouter = require('./routes/authRoutes.js');
 const attendanceRouter = require('./routes/attendanceRoutes.js');
 
 const app = express();
@@ -12,9 +11,8 @@ const corsOptions ={
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200,
 }
- 
 app.use(cors(corsOptions))
 
 app.use('/attendance', attendanceRouter);
-app.use('/login', loginRouter);
+app.use('/auth', authRouter);
 module.exports = app;
