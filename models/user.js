@@ -6,7 +6,7 @@ var userSchema = new mongoose.Schema({
     email: {type: String, required: true,unique: true},
     password: {type: String, required: true},
     isStudent: {type: Object,required: true},
-    isTeacher: {type: Object,required: true},
+    isTeacher: {type: Boolean,required: true},
     isAdmin: {type: Boolean,required: true},
     photo: {type: String},
     School: {type: String},

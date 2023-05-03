@@ -1,10 +1,11 @@
 const auth = require('../models/auth');
+const newuser = require('../models/signup');
 const catchAsync = require('../utils/catchAsync');
 const bcrypt = require('bcrypt-nodejs');
 const jwt = require('jsonwebtoken');
 
 exports.signup = catchAsync (async (req,res,next) => {
-    const newUser = await auth.create(req.body);
+    const newUser = await newuser.create(req.body);
     res.status(201).json({
         status: 'success',
         data: {

@@ -69,3 +69,34 @@ exports.attendanceCount = async (req, res) => {
     }
   });
 };
+
+exports.updateAttendance = async (req, res) => {
+  const { subject, date, attendance } = req.body;
+
+  try {
+    const updateResult = await Attendance.findOneAndUpdate(
+      { 'subjects.name': subject, 'subjects.dates.date': date },
+      {
+        $set: {
+          'subjects.$[subjectElem].dates.$[dateElem].attendance': attendance
+        }
+      },
+      {
+        arrayFilters: [
+          { 'subjectElem.name': subject },
+          { 'dateElem.date': date }
+        ]
+      }
+    );
+
+    if (!updateResult) {
+      return res
+        .status(404)
+        .json({ message: 'Attendance not found for the given subject and date' });
+    }
+
+    res.status(200).json({ message: 'Attendance updated successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error updating attendance', error: err });
+  }
+};
