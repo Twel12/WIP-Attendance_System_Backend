@@ -54,3 +54,32 @@ exports.login = async(req,res,next) => {
             });
     }
 };
+
+const AddSubject = require('../models/AddSubject');
+
+// Handle POST request for adding a new subject
+exports.addSubject = async (req, res) => {
+  try {
+    const { name, batch, year, SysID } = req.body;
+    const newSubject = new AddSubject({ name, batch, year, SysID });
+    await newSubject.save();
+    res.status(201).json({ message: 'Subject added successfully.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error. Failed to add subject.' });
+  }
+};
+
+
+// const Sub2 = require('../models/subject')
+
+// exports.createSubject = async (req, res) => {
+//   try {
+//     const newSubject = new Sub2(req.body);
+//     await newSubject.save();
+//     res.status(201).json({ message: 'Subject created successfully', subject: newSubject });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Server error' });
+//   }
+// };

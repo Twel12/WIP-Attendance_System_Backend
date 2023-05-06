@@ -5,5 +5,5 @@ const router = express.Router();
 
 router.post('/signup', authController.signup)
     .post('/login', authController.login)
-
+    .post('/createSubject', authController.addSubject)
 module.exports = router;

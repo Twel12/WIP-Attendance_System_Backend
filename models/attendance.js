@@ -4,12 +4,14 @@ const attendanceSchema = new mongoose.Schema({
   SystemID: {
     type: String
   },
+  Teacher_SysID: {
+    type: String
+  },
   value: {
     type: Boolean
   },
   time: {
     type: String,
-    required: true
   }
 });
 
@@ -28,7 +30,7 @@ const subjectSchema = new mongoose.Schema({
 });
 
 const attendanceRecordSchema = new mongoose.Schema({
-  subjects: [subjectSchema]
+  subjects: [subjectSchema],
 },{collection:'attendance_log'});
 
 const Attendance = mongoose.model('Attendance', attendanceRecordSchema);

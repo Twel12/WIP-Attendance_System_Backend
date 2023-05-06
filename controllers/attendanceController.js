@@ -100,3 +100,89 @@ exports.updateAttendance = async (req, res) => {
     res.status(500).json({ message: 'Error updating attendance', error: err });
   }
 };
+
+const Subject = require('../models/teacher');
+
+exports.getSubjectsBySysID = async function(req, res) {
+  const { SysID } = req.body;
+  try {
+    const subjects = await Subject.find({ 'subjects.SysID': SysID });
+    if (subjects.length === 0) {
+      res.json({ message: 'No subjects found with matching SysID' });
+    } else {
+      res.json(subjects);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error retrieving subjects' });
+  }
+};
+
+const Datez = require('../models/date');
+
+exports.getDatesBySubjectAndSysID = async function(req, res) {
+  const { SysID, subject } = req.params;
+
+  try {
+    const dates = await Datez.find({ "subjects.name": subject, "subjects.SysID": SysID });
+    if (dates.length === 0) {
+      res.json({ message: 'No dates found with matching subject and SysID' });
+    } else {
+      res.json(dates);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error retrieving dates' });
+  }
+};
+
+exports.getAttendanceList = async (req, res) => {
+  const subject = req.body.SubjectName;
+  const date = req.body.Date;
+
+  Attendance.aggregate([
+    { $unwind: "$subjects" },
+    { $match: { "subjects.name": subject } },
+    { $unwind: "$subjects.dates" },
+    { $match: { "subjects.dates.date": date } },
+    {
+      $group: {
+        _id: null,
+        attendance: { $push: "$subjects.dates.attendance" },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        attendance: {
+          $map: {
+            input: "$attendance",
+            as: "a",
+            in: {
+              SystemID: "$$a.SystemID",
+              value: "$$a.value",
+            },
+          },
+        },
+      },
+    },
+  ]).exec((err, result) => {
+    if (err) {
+      res.status(500).send(err);
+    } else {
+      // Create a map of SystemIDs to attendance values
+      const attendanceMap = new Map();
+      result[0].attendance.forEach((record) => {
+        attendanceMap.set(record.SystemID, record.value);
+      });
+
+      // Create an array of objects containing SystemID and attendance value
+      const attendanceArray = Array.from(attendanceMap).map(([SystemID, value]) => ({
+        SystemID,
+        value,
+      }));
+
+      res.status(200).send(attendanceArray);
+    }
+  });
+};
