@@ -8,7 +8,7 @@ var SignUpSchema = new mongoose.Schema({
     isStudent: {type: Object, required: true},
     isTeacher: {type: Boolean, required: true},
     isAdmin: {type: Boolean, required: true},
-},{collection:'logins'});
+},{collection:'auths'});
 
 SignUpSchema.pre('save', async function(next){
     if(!this.isModified('password')) return next(); 

@@ -26,6 +26,8 @@ exports.login = async(req,res,next) => {
                 return (null,false);
             }
             const authpassword = authdata.password;
+            const responsedata = authdata;
+            responsedata.password = undefined;
             const passwordMatch = bcrypt.compareSync(password,authpassword);
             if(!passwordMatch){
                 res.status(401).json({
@@ -44,7 +46,7 @@ exports.login = async(req,res,next) => {
             res.status(200).json({
                 status: 'success',
                 token: token,
-                    authdata
+                    responsedata
                 })
             ;}
     }catch(error){

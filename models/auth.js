@@ -4,7 +4,7 @@ var bcrypt = require('bcrypt-nodejs');
 var loginSchema = new mongoose.Schema({
     email: {type: String, required: true,unique: true},
     password: {type: String, required: true},
-},{collection:'logins'});
+},{collection:'auths'});
 
 loginSchema.pre('save', async function(next){
     if(!this.isModified('password')) return next(); 
